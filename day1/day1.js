@@ -15,9 +15,7 @@ lines.map((line) => {
     }
 });
 
-const totalsArray = elfArray.map(elf => {
-    return elf.reduce((a, b) => a + b, 0);
-});
+const totalsArray = elfArray.map(elf => elf.reduce((a, b) => a + b, 0));
 
 const sortedTotals = totalsArray.sort((a, b) => b - a);
 
