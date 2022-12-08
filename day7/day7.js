@@ -23,7 +23,6 @@ const example = '$ cd /\n' +
     '7214296 k';
 
 const splitInput = example.split('\n');
-console.log(splitInput);
 
 const createTree = (input) => {
     const tree = {
