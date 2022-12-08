@@ -37,35 +37,43 @@ const createTree = (input) => {
 
     for (let line of input) {
         let splitLine = line.split(' ');
-        if (splitLine[0] === '$') { // command
-            currentCommand = splitLine[1];
-            if (currentCommand === 'cd') {
-                if (splitLine[2] === '..') {
-                    currentDirectory = currentDirectory.parent;
-                } else if (splitLine[2] === '/') {
-                    currentDirectory = tree;
-                } else { // go to child directory
-                    currentDirectory = currentDirectory.children.find(child => child.name === splitLine[2]);
+
+        switch (splitLine[0]) {
+            case '$': // command
+                currentCommand = splitLine[1];
+                if (currentCommand === 'cd') {
+                    switch (splitLine[2]) {
+                        case '..':
+                            currentDirectory = currentDirectory.parent;
+                            break;
+                        case '/':
+                            currentDirectory = tree;
+                            break;
+                        default:
+                            currentDirectory = currentDirectory.children.find(child => child.name === splitLine[2]);
+                            break;
+                    }
                 }
-            }
-        } else if (currentCommand === 'ls') {
-            if (!isNaN(splitLine[0])) {
-                //File
-                currentDirectory.children.push({
-                    name: splitLine[1],
-                    isDirectory: false,
-                    parent: currentDirectory,
-                    size: parseInt(splitLine[0]),
-                });
-            } else {
-                //Directory
-                currentDirectory.children.push({
-                    name: splitLine[1],
-                    isDirectory: true,
-                    parent: currentDirectory,
-                    children: [],
-                });
-            }
+                break;
+            case 'ls':
+                if (!isNaN(splitLine[0])) {
+                    //File
+                    currentDirectory.children.push({
+                        name: splitLine[1],
+                        isDirectory: false,
+                        parent: currentDirectory,
+                        size: parseInt(splitLine[0]),
+                    });
+                } else {
+                    //Directory
+                    currentDirectory.children.push({
+                        name: splitLine[1],
+                        isDirectory: true,
+                        parent: currentDirectory,
+                        children: [],
+                    });
+                }
+                break;
         }
     }
     return tree;
