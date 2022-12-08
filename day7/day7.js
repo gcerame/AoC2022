@@ -23,6 +23,7 @@ const example = '$ cd /\n' +
     '7214296 k';
 
 const splitInput = example.split('\n');
+console.log(splitInput);
 
 const createTree = (input) => {
     const tree = {
@@ -36,25 +37,23 @@ const createTree = (input) => {
 
     for (let line of input) {
         let splitLine = line.split(' ');
-
-        switch (splitLine[0]) {
-            case '$': // command
-                currentCommand = splitLine[1];
-                if (currentCommand === 'cd') {
-                    switch (splitLine[2]) {
-                        case '..':
-                            currentDirectory = currentDirectory.parent;
-                            break;
-                        case '/':
-                            currentDirectory = tree;
-                            break;
-                        default:
-                            currentDirectory = currentDirectory.children.find(child => child.name === splitLine[2]);
-                            break;
-                    }
+        if (splitLine[0] === '$') { // command
+            currentCommand = splitLine[1];
+            if (currentCommand === 'cd') {
+                switch (splitLine[2]) {
+                    case '..':
+                        currentDirectory = currentDirectory.parent;
+                        break;
+                    case '/':
+                        currentDirectory = tree;
+                        break;
+                    default:
+                        currentDirectory = currentDirectory.children.find(child => child.name === splitLine[2]);
+                        break;
                 }
-                break;
-            case 'ls':
+            }
+        } else {
+            if (currentCommand === 'ls') {
                 if (!isNaN(splitLine[0])) {
                     //File
                     currentDirectory.children.push({
@@ -72,7 +71,7 @@ const createTree = (input) => {
                         children: [],
                     });
                 }
-                break;
+            }
         }
     }
     return tree;
